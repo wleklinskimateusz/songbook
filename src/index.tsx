@@ -1,11 +1,31 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import React from "react";
+import ReactDOM from "react-dom/client";
+import "./index.css";
+import App from "./App";
+import reportWebVitals from "./reportWebVitals";
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+import { getFirestore, collection, getDocs } from "firebase/firestore";
+import { getAuth } from "firebase/auth";
+
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAomkfNe-8YjmnIfsLJI9Fw6rqncigW9iY",
+  authDomain: "songbook-eea4b.firebaseapp.com",
+  projectId: "songbook-eea4b",
+  storageBucket: "songbook-eea4b.appspot.com",
+  messagingSenderId: "540721659836",
+  appId: "1:540721659836:web:f1af7162373a61f6e235b9",
+  measurementId: "G-KEJ9S28JRV",
+};
+
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
+const db = getFirestore(app);
+export const auth = getAuth(app);
 
 const root = ReactDOM.createRoot(
-  document.getElementById('root') as HTMLElement
+  document.getElementById("root") as HTMLElement
 );
 root.render(
   <React.StrictMode>
