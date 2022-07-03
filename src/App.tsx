@@ -1,12 +1,11 @@
 import React, { useEffect } from "react";
-import logo from "./logo.svg";
 import "./App.css";
-import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { auth } from "./index";
 import { User } from "firebase/auth";
-import { LoginPanel } from "./components/LoginPanel";
+import { LoginPanel } from "./components/LoginPanel/";
 import styled from "styled-components";
 import colors from "./colors";
+import { SongList } from "./components/SongList";
 
 const Container = styled.div`
   display: flex;
@@ -30,6 +29,7 @@ function App() {
   return (
     <Container>
       <LoginPanel user={user} />
+      <SongList />
     </Container>
   )
 
