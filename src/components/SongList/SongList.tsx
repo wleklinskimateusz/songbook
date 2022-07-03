@@ -1,30 +1,15 @@
-import React from "react";
-import { Song } from "../../types/Song";
-import { List, ListItem, ListTitle } from "./styles";
+import React, { FC } from "react";
+import { Container, List, ListItem, ListTitle } from "./styles";
+import { songs } from "../../data";
 
-const songs: Song[] = [
-  {
-    id: 0,
-    title: "Song 1",
-  },
-  {
-    id: 1,
-    title: "Song 2",
-  },
-  {
-    id: 2,
-    title: "Song 3",
-  },
-  {
-    id: 3,
-    title: "Song 4",
-  },
-];
+interface SongListProps {
+  selected: number | null;
+  setSelected: (id: number) => void;
+}
 
-export const SongList = () => {
-  const [selected, setSelected] = React.useState<number | null>(null);
+export const SongList: FC<SongListProps> = ({ selected, setSelected }) => {
   return (
-    <>
+    <Container>
       <ListTitle>Song Book</ListTitle>
       <List>
         {songs.map((song, i) => (
@@ -37,6 +22,6 @@ export const SongList = () => {
           </ListItem>
         ))}
       </List>
-    </>
+    </Container>
   );
 };

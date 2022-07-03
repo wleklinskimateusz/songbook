@@ -5,6 +5,14 @@ interface ListItemProps {
   selected: boolean;
 }
 
+export const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: fit-content;
+`;
+
 export const List = styled.ul`
   list-style: none;
   margin: 1rem;
@@ -35,11 +43,10 @@ export const ListItem = styled.li<ListItemProps>`
 `;
 
 export const ListTitle = styled.h3`
-
-    margin: 0.5rem;
-    padding: 0.5rem;
-    font-size: 1.5rem;
-    font-weight: bold;
-    color: ${colors.primary};
-    transition: all 0.4s ease-in-out;
-`
+  margin: 0.5rem;
+  padding: 0.5rem;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: ${colors.primary};
+  transition: all 0.4s ease-in-out;
+`;
