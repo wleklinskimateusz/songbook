@@ -5,13 +5,15 @@ import { LoginPanel } from "./components/LoginPanel/";
 import styled from "styled-components";
 import { SongList } from "./components/SongList";
 import { SongView } from "./components/SongView";
+import { Pane } from "evergreen-ui";
 
 const Container = styled.div`
   display: grid;
   grid-template-columns: 2fr 5fr;
   align-items: center;
-  justify-items: center;
   width: 100vw;
+  margin: 2rem;
+  padding: 2rem;
 `;
 
 function App() {
@@ -23,13 +25,19 @@ function App() {
     });
   });
 
-  return (<>
-  <LoginPanel user={user} />
-    <Container>
-      
-      <SongList selected={selected} setSelected={setSelected} />
-      {selected !== null ? <SongView song={selected}/> : <></>}
-    </Container>
+  return (
+    <>
+      <LoginPanel user={user} />
+      <Pane
+        display={"grid"}
+        gridTemplateColumns={"1fr 1fr"}
+        alignItems={"center"}
+        margin={"2rem"}
+        padding={"2rem"}
+      >
+        <SongList selected={selected} setSelected={setSelected} />
+        {selected !== null ? <SongView song={selected} /> : <></>}
+      </Pane>
     </>
   );
 }

@@ -4,4 +4,5 @@ export type Song = {
     artist?: string;
     lyrics?: string;
     chords?: string;
+    rating?: number;
 }

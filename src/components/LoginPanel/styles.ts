@@ -12,8 +12,6 @@ export const Box = styled.div`
   align-items: center;
   justify-content: center;
   width: fit-content;
-  border: 1px solid ${colors.accent};
-  border-radius: 0.5rem;
   color: ${colors.primary};
 `;
 

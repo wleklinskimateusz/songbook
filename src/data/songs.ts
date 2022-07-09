@@ -66,10 +66,75 @@ export const songs: Song[] = [
         Dobrze, że stoisz na brzegu,
         Bo ja właśnie schodzę na ląd.
         /2x`,
+        chords: `
+            C G D A
+            C G D A
+            C G D A
+            C G D A
+            C G D A
+            C G D A
+            C G D A
+            C G D A
+            
+            C G D A
+            C G D A
+            C G D A
+            C G D A
+            C G D A
+            C G D A`
   },
   {
     id: 1,
-    title: "November Rain",
+    title: "Wódka",
+    artist: "Kult",
+    lyrics: `
+        Zbudowali fabryki
+        Opracowali maszyny
+        Produkują wódkę
+        Tak, dużo, dużo wódki
+        Bo im tylko o to chodzi, abyś sam sobie szkodził
+        Abyś sam nie mógł myśleć
+        Abyś sam nie mógł chodzić
+
+        Ustawili kominy
+        Zbudowali drabiny
+        To już wszystko pracuje
+        Pracuje i truje
+        Bo im tylko o to chodzi, abyś sam sobie szkodził
+        Abyś sam nie mógł myśleć
+        Abyś sam nie mógł chodzić
+
+        Jeszcze dymią kominy
+        Produkują spaliny
+        Produkują wódkę
+        Tak, dużo, dużo, dużo, dużo, dużo, dużo, dużo wódki
+        Bo im tylko o to chodzi, abyś sam sobie szkodził
+        Abyś sam nie mógł myśleć
+        Abyś sam nie mógł chodzić
+
+        Zbudowali fabryki
+        Opracowali maszyny
+        Produkują wódkę
+        Tak, dużo, dużo, dużo, dużo, dużo, dużo wódki
+        Bo im tylko o to chodzi, abyś sam sobie szkodził
+        Abyś sam nie mógł myśleć
+        Abyś sam nie mógł chodzić
+
+        Ustawili kominy
+        Zbudowali drabiny
+        To już wszystko pracuje
+        Pracuje i truje
+        Bo im tylko o to chodzi, abyś sam sobie szkodził
+        Abyś sam nie mógł myśleć
+        Abyś sam nie mógł chodzić
+
+        Jeszcze dymią kominy
+        Produkują spaliny
+        Produkują wódkę
+        Tak, dużo, dużo, dużo, dużo, dużo, dużo, dużo wódki
+        Bo im tylko o to chodzi, abyś sam sobie szkodził
+        Abyś sam nie mógł myśleć
+        Abyś sam nie mógł chodzić`,
   },
   {
     id: 2,
