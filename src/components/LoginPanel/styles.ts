@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import colors from "../../colors";
+import {colors} from "../../config";
 
 export const Box = styled.div`
   position: absolute;

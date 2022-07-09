@@ -1,20 +1,17 @@
 import React, { useEffect } from "react";
-import "./App.css";
 import { auth } from "./index";
 import { User } from "firebase/auth";
 import { LoginPanel } from "./components/LoginPanel/";
 import styled from "styled-components";
-import colors from "./colors";
 import { SongList } from "./components/SongList";
 import { SongView } from "./components/SongView";
 
 const Container = styled.div`
-  display: flex;
+  display: grid;
+  grid-template-columns: 2fr 5fr;
   align-items: center;
-  justify-content: space-around;
+  justify-items: center;
   width: 100vw;
-  height: 100vh;
-  background-color: ${colors.background};
 `;
 
 function App() {
@@ -26,12 +23,14 @@ function App() {
     });
   });
 
-  return (
+  return (<>
+  <LoginPanel user={user} />
     <Container>
-      <LoginPanel user={user} />
+      
       <SongList selected={selected} setSelected={setSelected} />
-      {selected !== null && <SongView song={selected}/>}
+      {selected !== null ? <SongView song={selected}/> : <></>}
     </Container>
+    </>
   );
 }
 

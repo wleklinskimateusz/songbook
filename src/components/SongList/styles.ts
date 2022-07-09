@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import colors from "../../colors";
+import {colors} from "../../config";
 
 interface ListItemProps {
   selected: boolean;
@@ -11,6 +11,7 @@ export const Container = styled.div`
   align-items: center;
   justify-content: center;
   width: fit-content;
+  align-self: start;
 `;
 
 export const List = styled.ul`

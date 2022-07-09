@@ -1,5 +1,6 @@
 import styled from "styled-components";
-import colors from "../../colors";
+import {colors} from "../../config";
+import { fonts } from "../../config/fonts";
 
 export const Container = styled.div`
     margin: 0.5rem;
@@ -18,9 +19,17 @@ export const Container = styled.div`
 export const Title = styled.h3`
     margin: 0.5rem;
     padding: 0.5rem;
-    font-size: 1.5rem;
+    font-size: ${fonts.big};
     font-weight: bold;
     color: ${colors.primary};
     transition: all 0.4s ease-in-out;
     
+`
+
+export const Lyrics = styled.div`
+    margin: 0.5rem;
+    padding: 0.5rem;
+    font-size: ${fonts.middle}
+    color: ${colors.primary};
+    white-space: pre
 `
