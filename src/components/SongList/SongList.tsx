@@ -1,14 +1,14 @@
 import React, { FC, useState } from "react";
-import { songs } from "../../data";
 import { List, ListItemProps } from "../common/List";
+import { Song } from "../../types";
 
 import { Pane } from "evergreen-ui";
 
 interface SongListProps {
-  selected: number | null;
-  setSelected: (id: number) => void;
+  onSelect: (id: string) => void;
+  songs: Song[];
 }
-export const SongList: FC<SongListProps> = ({ selected, setSelected }) => {
+export const SongList: FC<SongListProps> = ({ onSelect, songs }) => {
   return (
     <Pane
       style={{
@@ -27,7 +27,7 @@ export const SongList: FC<SongListProps> = ({ selected, setSelected }) => {
           artist: item.artist,
           rating: item.rating,
         }))}
-        onSelect={(item: ListItemProps) => setSelected(item.id)}
+        onSelect={onSelect}
       />
     </Pane>
   );

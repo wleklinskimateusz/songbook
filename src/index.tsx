@@ -7,6 +7,9 @@ import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import { getFirestore, collection, getDocs } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
+import { QueryClient, QueryClientProvider } from "react-query";
+
+const queryClient = new QueryClient();
 
 const firebaseConfig = {
   apiKey: "AIzaSyAomkfNe-8YjmnIfsLJI9Fw6rqncigW9iY",
@@ -20,7 +23,7 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
-const db = getFirestore(app);
+export const db = getFirestore(app);
 export const auth = getAuth(app);
 
 const root = ReactDOM.createRoot(
@@ -28,8 +31,10 @@ const root = ReactDOM.createRoot(
 );
 root.render(
   <React.StrictMode>
-    <GlobalCSS />
-    <App />
+    <QueryClientProvider client={queryClient}>
+      <GlobalCSS />
+      <App />
+    </QueryClientProvider>
   </React.StrictMode>
 );
 

@@ -2,7 +2,7 @@ import { Song } from "../types/Song";
 
 export const songs: Song[] = [
   {
-    id: 0,
+    id: "0",
     title: "Szanta Narciarska",
     artist: "Artur Andrus",
     lyrics: `
@@ -66,7 +66,7 @@ export const songs: Song[] = [
         Dobrze, że stoisz na brzegu,
         Bo ja właśnie schodzę na ląd.
         /2x`,
-        chords: `
+    chords: `
             C G D A
             C G D A
             C G D A
@@ -81,10 +81,10 @@ export const songs: Song[] = [
             C G D A
             C G D A
             C G D A
-            C G D A`
+            C G D A`,
   },
   {
-    id: 1,
+    id: "1",
     title: "Wódka",
     artist: "Kult",
     lyrics: `
@@ -137,15 +137,15 @@ export const songs: Song[] = [
         Abyś sam nie mógł chodzić`,
   },
   {
-    id: 2,
+    id: "2",
     title: "I Will Follow You Into The Dark",
   },
   {
-    id: 3,
+    id: "3",
     title: "The End of the World",
   },
   {
-    id: 4,
+    id: "4",
     title: "Rocket Man",
   },
 ];

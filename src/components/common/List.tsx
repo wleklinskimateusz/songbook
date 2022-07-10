@@ -1,9 +1,9 @@
-import React, { FC, SyntheticEvent, useEffect, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import { Table, SearchInput, Pane } from "evergreen-ui";
 import { centerDiv } from "../../config/shortcuts";
 
 export interface ListItemProps {
-  id: number;
+  id: string;
   title?: string;
   artist?: string;
   rating?: number;
@@ -11,7 +11,7 @@ export interface ListItemProps {
 
 interface ListProps {
   data: ListItemProps[];
-  onSelect: (item: ListItemProps) => void;
+  onSelect: (id: string) => void;
 }
 
 export const List: FC<ListProps> = ({ data, onSelect }) => {
@@ -72,7 +72,7 @@ export const List: FC<ListProps> = ({ data, onSelect }) => {
             <Table.Row
               key={item.id}
               isSelectable
-              onSelect={() => onSelect(item)}
+              onSelect={() => onSelect(item.id)}
             >
               {Object.entries(item)
                 .filter(([k]) => k !== "id")

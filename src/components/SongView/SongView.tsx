@@ -1,5 +1,6 @@
 import React, { FC } from "react";
 import { songs } from "../../data";
+import { useQuery } from "react-query";
 import {
   containerStyles,
   LyricsContainer,
@@ -9,23 +10,25 @@ import {
 } from "./styles";
 
 import { Heading, Pre, Pane, Card } from "evergreen-ui";
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "../..";
+import { Song } from "../../types";
 
 interface SongViewProps {
-  song: number;
+  song: Song;
 }
 
 export const SongView: FC<SongViewProps> = ({ song }) => {
-  const currentSong = songs[song];
   return (
     <Card style={containerStyles} elevation={3}>
-      <Heading style={titleStyles}>{currentSong.title}</Heading>
+      <Heading style={titleStyles}>{song.title}</Heading>
       <Pane
         style={{
           display: "flex",
         }}
       >
-        <Pre style={lyricsStyles}>{currentSong.lyrics}</Pre>
-        <Pre style={chordsStyles}>{currentSong.chords}</Pre>
+        <Pre style={lyricsStyles}>{song.lyrics}</Pre>
+        <Pre style={chordsStyles}>{song.chords}</Pre>
       </Pane>
     </Card>
   );
