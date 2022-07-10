@@ -3,7 +3,14 @@ import { auth } from "../..";
 import { User, AuthError } from "firebase/auth";
 import React, { FC } from "react";
 import { Box } from "./styles";
-import { Avatar, IconButton, LogOutIcon, LogInIcon, Alert, Pane } from "evergreen-ui";
+import {
+  Avatar,
+  IconButton,
+  LogOutIcon,
+  LogInIcon,
+  Alert,
+  Pane,
+} from "evergreen-ui";
 
 const provider = new GoogleAuthProvider();
 
@@ -23,20 +30,33 @@ export const LoginPanel: FC<LoginPanelProps> = ({ user }) => {
       });
   };
   return (
-    <Pane position={"absolute"} top={"0"} right={"0"} display="flex" flexDirection={"column"} margin={"1rem"}>
-      <Pane display={"flex"} alignItems="center" >
-      {user ? (
-        <>
-          <Avatar name={user.displayName} size={40} />
-          <IconButton style={{
-            margin: "0.5rem"
-          }} icon={LogOutIcon} onClick={() => auth.signOut()}/>
-        </>
-      ) : (
-        <IconButton icon={LogInIcon} onClick={signIn} />
-      )}
+    <Pane
+      position={"absolute"}
+      top={"0"}
+      right={"0"}
+      padding={"1rem"}
+      display="flex"
+      flexDirection={"column"}
+      margin={"1rem"}
+      elevation={1}
+    >
+      <Pane display={"flex"} alignItems="center">
+        {user ? (
+          <>
+            <Avatar name={user.displayName} size={40} />
+            <IconButton
+              style={{
+                margin: "0.5rem",
+              }}
+              icon={LogOutIcon}
+              onClick={() => auth.signOut()}
+            />
+          </>
+        ) : (
+          <IconButton icon={LogInIcon} onClick={signIn} />
+        )}
       </Pane>
-     
+
       {error && <Alert intent="danger">{error.message}</Alert>}
     </Pane>
   );

@@ -1,6 +1,14 @@
 import React, { FC } from "react";
 import { songs } from "../../data";
-import { Chords, Container, Lyrics, LyricsContainer, Title } from "./styles";
+import {
+  containerStyles,
+  LyricsContainer,
+  titleStyles,
+  lyricsStyles,
+  chordsStyles,
+} from "./styles";
+
+import { Heading, Pre, Pane, Card } from "evergreen-ui";
 
 interface SongViewProps {
   song: number;
@@ -9,12 +17,16 @@ interface SongViewProps {
 export const SongView: FC<SongViewProps> = ({ song }) => {
   const currentSong = songs[song];
   return (
-    <Container>
-      <Title>{currentSong.title}</Title>
-      <LyricsContainer>
-        <Lyrics>{currentSong.lyrics}</Lyrics>
-        <Chords>{currentSong.chords}</Chords>
-      </LyricsContainer>
-    </Container>
+    <Card style={containerStyles} elevation={3}>
+      <Heading style={titleStyles}>{currentSong.title}</Heading>
+      <Pane
+        style={{
+          display: "flex",
+        }}
+      >
+        <Pre style={lyricsStyles}>{currentSong.lyrics}</Pre>
+        <Pre style={chordsStyles}>{currentSong.chords}</Pre>
+      </Pane>
+    </Card>
   );
 };

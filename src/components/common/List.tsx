@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from "react";
+import React, { FC, SyntheticEvent, useEffect, useState } from "react";
 import { Table, SearchInput, Pane } from "evergreen-ui";
 import { centerDiv } from "../../config/shortcuts";
 
@@ -16,18 +16,33 @@ interface ListProps {
 
 export const List: FC<ListProps> = ({ data, onSelect }) => {
   const [keys, setKeys] = useState<string[]>([]);
+  const [filter, setFilter] = useState<string>("");
+  const [filteredItems, setFilteredItems] = useState<ListItemProps[]>([]);
+
+  useEffect(() => {
+    if (!filter) {
+      setFilteredItems(data);
+      return;
+    }
+    const output = data.filter(
+      (item) =>
+        item.title?.toLowerCase().includes(filter.toLowerCase()) ||
+        item.artist?.toLowerCase().includes(filter.toLowerCase())
+    );
+    setFilteredItems(output);
+  }, [filter, data]);
 
   useEffect(() => {
     const output: string[] = [];
     data.forEach((item) => {
       Object.keys(item).forEach((key) => {
-        if (!output.includes(key)) {
+        if (!output.includes(key) && key !== "id") {
           output.push(key);
         }
       });
     });
     setKeys(output);
-  }, [data, keys, setKeys]);
+  }, [data]);
   return (
     <Pane
       style={{
@@ -35,7 +50,11 @@ export const List: FC<ListProps> = ({ data, onSelect }) => {
         ...centerDiv,
       }}
     >
-      <SearchInput />
+      <SearchInput
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+          setFilter(e.target.value);
+        }}
+      />
       <Table
         style={{
           width: "100%",
@@ -45,21 +64,23 @@ export const List: FC<ListProps> = ({ data, onSelect }) => {
       >
         <Table.Head>
           {keys.map((k) => (
-            <Table.TextHeaderCell>{k}</Table.TextHeaderCell>
+            <Table.TextHeaderCell key={k}>{k}</Table.TextHeaderCell>
           ))}
         </Table.Head>
         <Table.VirtualBody height={240}>
-          {data.map((item) => (
+          {filteredItems.map((item) => (
             <Table.Row
               key={item.id}
               isSelectable
               onSelect={() => onSelect(item)}
             >
-              {Object.entries(item).map(([k, v]) => (
-                <Table.TextCell key={k ?? ""} isNumber={!isNaN(v)}>
-                  {v}
-                </Table.TextCell>
-              ))}
+              {Object.entries(item)
+                .filter(([k]) => k !== "id")
+                .map(([k, v]) => (
+                  <Table.TextCell key={k} isNumber={!isNaN(v)}>
+                    {v}
+                  </Table.TextCell>
+                ))}
             </Table.Row>
           ))}
         </Table.VirtualBody>

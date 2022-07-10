@@ -1,5 +1,4 @@
-import React, { FC } from "react";
-import { ListTitle } from "./styles";
+import React, { FC, useState } from "react";
 import { songs } from "../../data";
 import { List, ListItemProps } from "../common/List";
 
@@ -30,7 +29,6 @@ export const SongList: FC<SongListProps> = ({ selected, setSelected }) => {
         }))}
         onSelect={(item: ListItemProps) => setSelected(item.id)}
       />
-
     </Pane>
   );
 };

@@ -8,7 +8,6 @@ import { getAnalytics } from "firebase/analytics";
 import { getFirestore, collection, getDocs } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 
-
 const firebaseConfig = {
   apiKey: "AIzaSyAomkfNe-8YjmnIfsLJI9Fw6rqncigW9iY",
   authDomain: "songbook-eea4b.firebaseapp.com",
