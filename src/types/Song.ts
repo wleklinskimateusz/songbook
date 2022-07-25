@@ -1,9 +1,8 @@
 export type Song = {
   id: string;
   title: string;
+  filename?: string;
   artist?: string;
-  lyrics?: string;
-  chords?: string;
   rating?: number;
   addedBy?: string;
 };

@@ -23,14 +23,13 @@ const Container = styled.div`
 
 function App() {
   const { data, isLoading, isError } = useQuery("songs", async () => {
-    const output: Song[] = [];
     const querySnapshot = await getDocs(collection(db, "songs"));
+    const output: Song[] = [];
     querySnapshot.forEach((doc) => {
       output.push({
         id: doc.id,
         ...doc.data(),
       } as Song);
-      console.log(doc);
     });
     return output;
   });
