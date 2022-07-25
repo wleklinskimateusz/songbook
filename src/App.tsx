@@ -1,5 +1,5 @@
-import React, { useEffect } from "react";
-import { auth, db } from "./index";
+import React, { useEffect, useState } from "react";
+import { auth, db, storage } from "./index";
 import { User } from "firebase/auth";
 import { LoginPanel } from "./components/LoginPanel/";
 import styled from "styled-components";
@@ -10,6 +10,7 @@ import { useQuery } from "react-query";
 import { collection, getDocs } from "firebase/firestore";
 import { Song } from "./types";
 import { ListItemProps } from "./components/common/List";
+import { getDownloadURL, getStorage, ref } from "firebase/storage";
 
 const Container = styled.div`
   display: grid;
@@ -29,21 +30,46 @@ function App() {
         id: doc.id,
         ...doc.data(),
       } as Song);
+      console.log(doc);
     });
     return output;
   });
   const [user, setUser] = React.useState<User | null>(null);
   const [selected, setSelected] = React.useState<Song | null>(null);
+  const lyricsRef = ref(storage, "lyrics/szanta_narciarska.txt");
+  const [lyrics, setLyrics] = useState<string | null>(null);
+  const [isLoadingLyrics, setIsLoadingLyrics] = useState(false);
+  const [errorLyrics, setErrorLyrics] =
+    useState<ProgressEvent<EventTarget> | null>(null);
+
+  useEffect(() => {
+    const fetchLyrics = async () => {
+      const url = await getDownloadURL(lyricsRef);
+      const xhr = new XMLHttpRequest();
+      xhr.responseType = "text";
+      xhr.onload = async () => {
+        setLyrics(await xhr.response);
+        setIsLoadingLyrics(false);
+      };
+      xhr.onerror = (error) => {
+        setErrorLyrics(error);
+      };
+      setIsLoadingLyrics(true);
+      xhr.open("GET", url);
+      xhr.send();
+    };
+    fetchLyrics();
+  }, []);
   useEffect(() => {
     auth.onAuthStateChanged((user: User | null) => {
       setUser(user);
     });
   });
-  if (isLoading) {
+  if (isLoading || isLoadingLyrics) {
     return <>Loading...</>;
   }
 
-  if (isError) {
+  if (isError || errorLyrics) {
     return <>Ups... Error</>;
   }
 
@@ -69,6 +95,13 @@ function App() {
         />
         {selected !== null ? <SongView song={selected} /> : <></>}
       </Pane>
+      <button
+        onClick={() => {
+          console.log(lyrics);
+        }}
+      >
+        Get me some lyrics
+      </button>
     </>
   );
 }
