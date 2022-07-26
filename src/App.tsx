@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { auth } from "./index";
 import { User } from "firebase/auth";
 import { LoginPanel } from "./components/LoginPanel/";
@@ -11,8 +11,9 @@ import { Pane } from "evergreen-ui";
 import { Song } from "./types";
 
 function App() {
-  const [user, setUser] = React.useState<User | null>(null);
-  const [selected, setSelected] = React.useState<Song | null>(null);
+  const [user, setUser] = useState<User | null>(null);
+  const [selected, setSelected] = useState<Song | null>(null);
+  const [isShownForm, setIsShownForm] = useState(false);
   useEffect(() => {
     auth.onAuthStateChanged((user: User | null) => {
       setUser(user);
@@ -29,10 +30,13 @@ function App() {
         margin={"2rem"}
         padding={"2rem"}
       >
-        <SongList setSelected={setSelected} />
+        <SongList
+          setSelected={setSelected}
+          onAdd={() => setIsShownForm(true)}
+        />
         {selected !== null ? <SongView song={selected} /> : <></>}
       </Pane>
-      <SongForm />
+      <SongForm isShown={isShownForm} setIsShown={setIsShownForm} />
     </>
   );
 }

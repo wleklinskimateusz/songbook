@@ -2,15 +2,16 @@ import React, { FC } from "react";
 import { List } from "../common/List";
 import { Song } from "../../types";
 
-import { Pane } from "evergreen-ui";
+import { Button, Pane } from "evergreen-ui";
 import { useQuery } from "react-query";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../..";
 
 interface SongListProps {
   setSelected: (song: Song | null) => void;
+  onAdd: () => void;
 }
-export const SongList: FC<SongListProps> = ({ setSelected }) => {
+export const SongList: FC<SongListProps> = ({ setSelected, onAdd }) => {
   const {
     data: songs,
     isLoading,
@@ -47,6 +48,7 @@ export const SongList: FC<SongListProps> = ({ setSelected }) => {
         width: "100%",
       }}
     >
+      <Button onClick={onAdd}>Add song</Button>
       <List
         data={
           songs?.map((item) => ({

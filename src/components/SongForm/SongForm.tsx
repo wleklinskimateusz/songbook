@@ -5,13 +5,17 @@ import { Song } from "../../types";
 
 interface ISongProps {
   editedSong?: Song;
+  isShown: boolean;
+  setIsShown: (state: boolean) => void;
 }
 
-export const SongForm: FC<ISongProps> = ({ editedSong }) => {
-  const [isShown, setIsShown] = useState(false);
+export const SongForm: FC<ISongProps> = ({
+  editedSong,
+  setIsShown,
+  isShown,
+}) => {
   return (
     <>
-      <Button onClick={() => setIsShown(true)}>Add</Button>
       <SideSheet isShown={isShown} onCloseComplete={() => setIsShown(false)}>
         <Heading margin={40}>
           {editedSong ? `Edit ${editedSong.title}` : "Create new Song"}
