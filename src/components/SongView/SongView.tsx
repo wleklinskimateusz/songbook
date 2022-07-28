@@ -21,10 +21,10 @@ interface SongViewProps {
 
 export const SongView: FC<SongViewProps> = ({ song }) => {
   const [lyrics, setLyrics] = useState<string | null>(null);
+  const [chords, setChords] = useState<string | null>(null);
   const [editLyrics, setEditLyrics] = useState(false);
   const [editChords, setEditChords] = useState(false);
   const lyricsElement = useRef<HTMLPreElement>(null);
-  const [chords, setChords] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<ProgressEvent<EventTarget> | null>(null);
 
@@ -36,6 +36,7 @@ export const SongView: FC<SongViewProps> = ({ song }) => {
       setData: (arg: string) => void
     ) => {
       const url = await getDownloadURL(ref);
+      console.log("url", url);
       const xhr = new XMLHttpRequest();
       xhr.responseType = "text";
       xhr.onload = async () => {
@@ -73,6 +74,27 @@ export const SongView: FC<SongViewProps> = ({ song }) => {
               onClick={() => setEditLyrics(true)}
               contentEditable={editLyrics}
               onBlur={() => setEditLyrics(false)}
+              onKeyDown={(event: React.KeyboardEvent<HTMLPreElement>) => {
+                if (event.ctrlKey || event.metaKey) {
+                }
+                let charCode = String.fromCharCode(event.which).toLowerCase();
+                if ((event.ctrlKey || event.metaKey) && charCode === "s") {
+                  alert("CTRL+S Pressed");
+                  event.preventDefault();
+                } else if (
+                  (event.ctrlKey || event.metaKey) &&
+                  charCode === "c"
+                ) {
+                  alert("CTRL+C Pressed");
+                  event.preventDefault();
+                } else if (
+                  (event.ctrlKey || event.metaKey) &&
+                  charCode === "v"
+                ) {
+                  alert("CTRL+V Pressed");
+                  event.preventDefault();
+                }
+              }}
             >
               {lyrics}
             </Pre>
