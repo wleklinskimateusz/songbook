@@ -1,6 +1,6 @@
 import React, { FC, useEffect, useState } from "react";
 import { Table, SearchInput, Pane } from "evergreen-ui";
-import { centerDiv } from "../../config/shortcuts";
+import { centerDiv } from "../../../config/shortcuts";
 
 export interface ListItemProps {
   id: string;
@@ -9,12 +9,12 @@ export interface ListItemProps {
   rating?: number;
 }
 
-interface ListProps {
+type Props = {
   data: ListItemProps[];
   onSelect: (id: string) => void;
-}
+};
 
-export const List: FC<ListProps> = ({ data, onSelect }) => {
+export const List: FC<Props> = ({ data, onSelect }) => {
   const [keys, setKeys] = useState<string[]>([]);
   const [filter, setFilter] = useState<string>("");
   const [filteredItems, setFilteredItems] = useState<ListItemProps[]>([]);

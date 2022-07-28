@@ -1,5 +1,5 @@
 import React, { FC } from "react";
-import { List } from "../common/List";
+import { List } from "../common";
 import { Song } from "../../types";
 
 import { Button, Pane } from "evergreen-ui";
@@ -7,11 +7,12 @@ import { useQuery } from "react-query";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../..";
 
-interface SongListProps {
+type Props = {
   setSelected: (song: Song | null) => void;
   onAdd: () => void;
-}
-export const SongList: FC<SongListProps> = ({ setSelected, onAdd }) => {
+};
+
+export const SongList: FC<Props> = ({ setSelected, onAdd }) => {
   const {
     data: songs,
     isLoading,

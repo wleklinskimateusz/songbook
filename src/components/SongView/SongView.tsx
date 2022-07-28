@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from "react";
+import React, { FC, useEffect, useRef, useState } from "react";
 
 import { useQuery } from "react-query";
 import {
@@ -21,6 +21,9 @@ interface SongViewProps {
 
 export const SongView: FC<SongViewProps> = ({ song }) => {
   const [lyrics, setLyrics] = useState<string | null>(null);
+  const [editLyrics, setEditLyrics] = useState(false);
+  const [editChords, setEditChords] = useState(false);
+  const lyricsElement = useRef<HTMLPreElement>(null);
   const [chords, setChords] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<ProgressEvent<EventTarget> | null>(null);
@@ -64,8 +67,23 @@ export const SongView: FC<SongViewProps> = ({ song }) => {
           "Loading..."
         ) : (
           <>
-            <Pre style={lyricsStyles}>{lyrics}</Pre>
-            <Pre style={chordsStyles}>{chords}</Pre>
+            <Pre
+              ref={lyricsElement}
+              style={lyricsStyles}
+              onClick={() => setEditLyrics(true)}
+              contentEditable={editLyrics}
+              onBlur={() => setEditLyrics(false)}
+            >
+              {lyrics}
+            </Pre>
+            <Pre
+              style={chordsStyles}
+              onClick={() => setEditChords(true)}
+              contentEditable={editChords}
+              onBlur={() => setEditChords(false)}
+            >
+              {chords}
+            </Pre>
           </>
         )}
       </Pane>

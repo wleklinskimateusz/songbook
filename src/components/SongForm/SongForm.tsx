@@ -3,17 +3,13 @@ import React, { FC, useState } from "react";
 import { SideSheet, Button, Heading, Pane, TextInputField } from "evergreen-ui";
 import { Song } from "../../types";
 
-interface ISongProps {
+type Props = {
   editedSong?: Song;
   isShown: boolean;
   setIsShown: (state: boolean) => void;
-}
+};
 
-export const SongForm: FC<ISongProps> = ({
-  editedSong,
-  setIsShown,
-  isShown,
-}) => {
+export const SongForm: FC<Props> = ({ editedSong, setIsShown, isShown }) => {
   return (
     <>
       <SideSheet isShown={isShown} onCloseComplete={() => setIsShown(false)}>

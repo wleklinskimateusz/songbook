@@ -5,4 +5,5 @@ export type Song = {
   artist?: string;
   rating?: number;
   addedBy?: string;
+  modified?: Date;
 };

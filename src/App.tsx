@@ -1,11 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { auth } from "./index";
 import { User } from "firebase/auth";
-import { LoginPanel } from "./components/LoginPanel/";
 
-import { SongList } from "./components/SongList";
-import { SongView } from "./components/SongView";
-import { SongForm } from "./components/SongForm";
+import { SongList, SongView, SongForm, LoginPanel } from "./components";
 import { Pane } from "evergreen-ui";
 
 import { Song } from "./types";
