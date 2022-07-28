@@ -13,11 +13,19 @@ import { Heading, Pre, Pane, Card } from "evergreen-ui";
 import { doc, getDoc } from "firebase/firestore";
 import { db, storage } from "../..";
 import { Song } from "../../types";
-import { getDownloadURL, ref, StorageReference } from "firebase/storage";
+import {
+  getDownloadURL,
+  ref,
+  StorageReference,
+  uploadString,
+} from "firebase/storage";
 
 interface SongViewProps {
   song: Song;
 }
+
+const isSaving = (event: React.KeyboardEvent<HTMLPreElement>) =>
+  (event.ctrlKey || event.metaKey) && event.key === "s";
 
 export const SongView: FC<SongViewProps> = ({ song }) => {
   const [lyrics, setLyrics] = useState<string | null>(null);
@@ -25,8 +33,25 @@ export const SongView: FC<SongViewProps> = ({ song }) => {
   const [editLyrics, setEditLyrics] = useState(false);
   const [editChords, setEditChords] = useState(false);
   const lyricsElement = useRef<HTMLPreElement>(null);
+  const chordsElement = useRef<HTMLPreElement>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<ProgressEvent<EventTarget> | null>(null);
+
+  const onSave = (
+    event: React.KeyboardEvent<HTMLPreElement>,
+    source: "lyrics" | "chords"
+  ) => {
+    event.preventDefault();
+    const storeRef = ref(storage, `${source}/${song.filename}`);
+
+    uploadString(
+      storeRef,
+      (source === "lyrics" ? lyricsElement : chordsElement).current
+        ?.innerText ?? ""
+    ).then(() => {
+      alert("Success!");
+    });
+  };
 
   useEffect(() => {
     const lyricsRef = ref(storage, `lyrics/${song.filename}`);
@@ -36,11 +61,11 @@ export const SongView: FC<SongViewProps> = ({ song }) => {
       setData: (arg: string) => void
     ) => {
       const url = await getDownloadURL(ref);
-      console.log("url", url);
       const xhr = new XMLHttpRequest();
       xhr.responseType = "text";
       xhr.onload = async () => {
-        setData(await xhr.response);
+        const data: string = await xhr.response;
+        setData(data);
         setIsLoading(false);
       };
       xhr.onerror = (error) => {
@@ -74,35 +99,21 @@ export const SongView: FC<SongViewProps> = ({ song }) => {
               onClick={() => setEditLyrics(true)}
               contentEditable={editLyrics}
               onBlur={() => setEditLyrics(false)}
-              onKeyDown={(event: React.KeyboardEvent<HTMLPreElement>) => {
-                if (event.ctrlKey || event.metaKey) {
-                }
-                let charCode = String.fromCharCode(event.which).toLowerCase();
-                if ((event.ctrlKey || event.metaKey) && charCode === "s") {
-                  alert("CTRL+S Pressed");
-                  event.preventDefault();
-                } else if (
-                  (event.ctrlKey || event.metaKey) &&
-                  charCode === "c"
-                ) {
-                  alert("CTRL+C Pressed");
-                  event.preventDefault();
-                } else if (
-                  (event.ctrlKey || event.metaKey) &&
-                  charCode === "v"
-                ) {
-                  alert("CTRL+V Pressed");
-                  event.preventDefault();
-                }
-              }}
+              onKeyDown={(event: React.KeyboardEvent<HTMLPreElement>) =>
+                isSaving(event) && onSave(event, "lyrics")
+              }
             >
               {lyrics}
             </Pre>
             <Pre
+              ref={chordsElement}
               style={chordsStyles}
               onClick={() => setEditChords(true)}
               contentEditable={editChords}
               onBlur={() => setEditChords(false)}
+              onKeyDown={(event: React.KeyboardEvent<HTMLPreElement>) =>
+                isSaving(event) && onSave(event, "chords")
+              }
             >
               {chords}
             </Pre>
