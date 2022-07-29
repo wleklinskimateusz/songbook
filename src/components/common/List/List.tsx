@@ -3,7 +3,7 @@ import { Table, SearchInput, Pane } from "evergreen-ui";
 import { centerDiv } from "../../../config/shortcuts";
 
 export interface ListItemProps {
-  id: string;
+  id?: string;
   title?: string;
   artist?: string;
   rating?: number;
@@ -72,7 +72,7 @@ export const List: FC<Props> = ({ data, onSelect }) => {
             <Table.Row
               key={item.id}
               isSelectable
-              onSelect={() => onSelect(item.id)}
+              onSelect={() => onSelect(item.id ?? "")}
             >
               {Object.entries(item)
                 .filter(([k]) => k !== "id")

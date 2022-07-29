@@ -43,7 +43,7 @@ export const SongView: FC<SongViewProps> = ({ song }) => {
   ) => {
     event.preventDefault();
     const storeRef = ref(storage, `${source}/${song.filename}`);
-
+    console.log("dupa");
     uploadString(
       storeRef,
       (source === "lyrics" ? lyricsElement : chordsElement).current
@@ -60,23 +60,42 @@ export const SongView: FC<SongViewProps> = ({ song }) => {
       ref: StorageReference,
       setData: (arg: string) => void
     ) => {
-      const url = await getDownloadURL(ref);
+      let url;
+      try {
+        url = await getDownloadURL(ref);
+      } catch (e) {
+        console.error(e);
+        setData("");
+
+        return;
+      }
       const xhr = new XMLHttpRequest();
       xhr.responseType = "text";
       xhr.onload = async () => {
-        const data: string = await xhr.response;
-        setData(data);
-        setIsLoading(false);
+        try {
+          const data: string = await xhr.response;
+          setData(data);
+          setIsLoading(false);
+        } catch (e) {
+          console.error(e);
+          console.log("dupa!!!");
+        }
       };
       xhr.onerror = (error) => {
         setError(error);
+        console.log("dupa");
       };
       setIsLoading(true);
       xhr.open("GET", url);
       xhr.send();
     };
-    fetch(lyricsRef, setLyrics);
-    fetch(chordsRef, setChords);
+    try {
+      fetch(lyricsRef, setLyrics);
+      fetch(chordsRef, setChords);
+    } catch (e) {
+      console.error(e);
+      console.log("dupa");
+    }
   }, [song.filename]);
 
   if (error) return <>Ups!, error: {error.type}</>;

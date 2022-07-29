@@ -1,5 +1,5 @@
-export type Song = {
-  id: string;
+export interface Song {
+  id?: string;
   title: string;
   filename?: string;
   artist?: string;
