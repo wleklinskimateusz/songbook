@@ -6,14 +6,26 @@ import { queryClient } from "../..";
 
 export const createAddSong =
   (
-    filename: string,
+    filename: string | null,
     auth: Auth,
-    title: string,
-    artist: string,
+    title: string | null,
+    artist: string | null,
     setAlert: (status: AlertStatus) => void,
     setStartTimeout: (val: boolean) => void
   ) =>
   async () => {
+    if (!filename) {
+      console.error("filename is not present");
+      return;
+    }
+    if (!title) {
+      console.error("title is not present");
+      return;
+    }
+    if (!artist) {
+      console.error("artist is not present");
+      return;
+    }
     try {
       const newSong: Song = {
         title,

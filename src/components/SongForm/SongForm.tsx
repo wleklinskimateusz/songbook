@@ -16,9 +16,9 @@ type Props = {
 
 export const SongForm: FC<Props> = ({ setIsShown, isShown, setAlert }) => {
   const auth = getAuth();
-  const [title, setTitle] = useState<string>("");
-  const [artist, setArtist] = useState<string>("");
-  const [filename, setFilename] = useState<string>("");
+  const [title, setTitle] = useState<string | null>(null);
+  const [artist, setArtist] = useState<string | null>(null);
+  const [filename, setFilename] = useState<string | null>(null);
   const [startTimeout, setStartTimeout] = useState(false);
 
   const addSong = createAddSong(
@@ -62,9 +62,9 @@ export const SongForm: FC<Props> = ({ setIsShown, isShown, setAlert }) => {
               label="Filename for the song"
               required
               placeholder="Select filename"
-              isInvalid={filename.includes(" ")}
+              isInvalid={filename?.includes(" ")}
               validationMessage={
-                filename.includes(" ") && "Filename cannot contain spaces"
+                filename?.includes(" ") && "Filename cannot contain spaces"
               }
               onBlur={(event: React.FocusEvent<HTMLInputElement>) =>
                 setFilename(event.target.value)

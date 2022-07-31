@@ -46,6 +46,13 @@ export const SongView: FC<SongViewProps> = ({ song, setAlert }) => {
     setIsChanged(false);
   }, [isLoading]);
 
+  useEffect(() => {
+    if (error) {
+      console.error(error);
+    }
+  });
+  if (!song.filename) return <>No data</>;
+
   return (
     <>
       {isChanged && (
@@ -66,9 +73,7 @@ export const SongView: FC<SongViewProps> = ({ song, setAlert }) => {
             display: "flex",
           }}
         >
-          {error ? (
-            "Something went wrong"
-          ) : isLoading ? (
+          {isLoading ? (
             "Loading..."
           ) : (
             <>
@@ -83,7 +88,11 @@ export const SongView: FC<SongViewProps> = ({ song, setAlert }) => {
                 }
                 onChange={() => setIsChanged(true)}
               >
-                {lyrics}
+                {lyrics ?? (
+                  <span style={{ color: "whitesmoke", fontStyle: "italic" }}>
+                    Enter Some Lyrics here
+                  </span>
+                )}
               </Pre>
               <Pre
                 ref={chordsElement}
@@ -96,7 +105,14 @@ export const SongView: FC<SongViewProps> = ({ song, setAlert }) => {
                 }
                 onChange={() => setIsChanged(true)}
               >
-                {chords}
+                {chords ?? (
+                  <span
+                    contentEditable={false}
+                    style={{ color: "whitesmoke", fontStyle: "italic" }}
+                  >
+                    Enter Chords Here
+                  </span>
+                )}
               </Pre>
             </>
           )}
