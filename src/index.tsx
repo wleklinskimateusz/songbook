@@ -4,7 +4,6 @@ import GlobalCSS from "./global.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
 import { getFirestore } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 import { getStorage } from "firebase/storage";
