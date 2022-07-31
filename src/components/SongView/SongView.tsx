@@ -1,92 +1,107 @@
 import React, { FC, useEffect, useRef, useState } from "react";
 
-import { useQuery } from "react-query";
 import {
   containerStyles,
-  LyricsContainer,
   titleStyles,
   lyricsStyles,
   chordsStyles,
+  saveButtonStyles,
 } from "./styles";
 
-import { Heading, Pre, Pane, Card } from "evergreen-ui";
-import { doc, getDoc } from "firebase/firestore";
-import { db, storage } from "../..";
-import { Song } from "../../types";
-import { getDownloadURL, ref, StorageReference } from "firebase/storage";
+import { Heading, Pre, Pane, Card, Button } from "evergreen-ui";
+import { Song, AlertStatus } from "../../types";
+import { useHandleAlert, useFetchSong, useCheckChanges } from "../../hooks";
+import { createOnSave } from "./createOnSave";
 
 interface SongViewProps {
   song: Song;
+  setAlert: (status: AlertStatus) => void;
 }
 
-export const SongView: FC<SongViewProps> = ({ song }) => {
-  const [lyrics, setLyrics] = useState<string | null>(null);
+const isSaving = (event: React.KeyboardEvent<HTMLPreElement>) =>
+  (event.ctrlKey || event.metaKey) && event.key === "s";
+
+export const SongView: FC<SongViewProps> = ({ song, setAlert }) => {
   const [editLyrics, setEditLyrics] = useState(false);
   const [editChords, setEditChords] = useState(false);
   const lyricsElement = useRef<HTMLPreElement>(null);
-  const [chords, setChords] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<ProgressEvent<EventTarget> | null>(null);
+  const chordsElement = useRef<HTMLPreElement>(null);
+  const [startTimeout, setStartTimeout] = useState(false);
+  const [isChanged, setIsChanged] = useState(false);
+
+  const onSave = createOnSave(
+    song,
+    setIsChanged,
+    setAlert,
+    lyricsElement,
+    chordsElement,
+    setStartTimeout
+  );
+  const { lyrics, chords, isLoading, error } = useFetchSong(song.filename);
+
+  useHandleAlert(startTimeout, setStartTimeout, setAlert);
+  useCheckChanges(lyrics, chords, setIsChanged, lyricsElement, chordsElement);
 
   useEffect(() => {
-    const lyricsRef = ref(storage, `lyrics/${song.filename}`);
-    const chordsRef = ref(storage, `chords/${song.filename}`);
-    const fetch = async (
-      ref: StorageReference,
-      setData: (arg: string) => void
-    ) => {
-      const url = await getDownloadURL(ref);
-      const xhr = new XMLHttpRequest();
-      xhr.responseType = "text";
-      xhr.onload = async () => {
-        setData(await xhr.response);
-        setIsLoading(false);
-      };
-      xhr.onerror = (error) => {
-        setError(error);
-      };
-      setIsLoading(true);
-      xhr.open("GET", url);
-      xhr.send();
-    };
-    fetch(lyricsRef, setLyrics);
-    fetch(chordsRef, setChords);
-  }, [song.filename]);
-
-  if (error) return <>Ups!, error: {error.type}</>;
+    setIsChanged(false);
+  }, [isLoading]);
 
   return (
-    <Card style={containerStyles} elevation={3}>
-      <Heading style={titleStyles}>{song.title}</Heading>
-      <Pane
-        style={{
-          display: "flex",
-        }}
-      >
-        {isLoading ? (
-          "Loading..."
-        ) : (
-          <>
-            <Pre
-              ref={lyricsElement}
-              style={lyricsStyles}
-              onClick={() => setEditLyrics(true)}
-              contentEditable={editLyrics}
-              onBlur={() => setEditLyrics(false)}
-            >
-              {lyrics}
-            </Pre>
-            <Pre
-              style={chordsStyles}
-              onClick={() => setEditChords(true)}
-              contentEditable={editChords}
-              onBlur={() => setEditChords(false)}
-            >
-              {chords}
-            </Pre>
-          </>
-        )}
-      </Pane>
-    </Card>
+    <>
+      {isChanged && (
+        <Button
+          onClick={() => {
+            onSave("lyrics");
+            onSave("chords");
+          }}
+          style={saveButtonStyles}
+        >
+          Save changes
+        </Button>
+      )}
+      <Card style={containerStyles} elevation={3}>
+        <Heading style={titleStyles}>{song.title}</Heading>
+        <Pane
+          style={{
+            display: "flex",
+          }}
+        >
+          {error ? (
+            "Something went wrong"
+          ) : isLoading ? (
+            "Loading..."
+          ) : (
+            <>
+              <Pre
+                ref={lyricsElement}
+                style={lyricsStyles}
+                onClick={() => setEditLyrics(true)}
+                contentEditable={editLyrics}
+                onBlur={() => setEditLyrics(false)}
+                onKeyDown={(event: React.KeyboardEvent<HTMLPreElement>) =>
+                  isSaving(event) && onSave("lyrics", event)
+                }
+                onChange={() => setIsChanged(true)}
+              >
+                {lyrics}
+              </Pre>
+              <Pre
+                ref={chordsElement}
+                style={chordsStyles}
+                onClick={() => setEditChords(true)}
+                contentEditable={editChords}
+                onBlur={() => setEditChords(false)}
+                onKeyDown={(event: React.KeyboardEvent<HTMLPreElement>) =>
+                  isSaving(event) && onSave("chords", event)
+                }
+                onChange={() => setIsChanged(true)}
+              >
+                {chords}
+              </Pre>
+            </>
+          )}
+        </Pane>
+      </Card>
+    </>
   );
 };

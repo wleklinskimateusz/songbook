@@ -1,8 +1,5 @@
-import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
-import { auth } from "../..";
 import { User, AuthError } from "firebase/auth";
-import React, { FC } from "react";
-import { Box } from "./styles";
+import React, { FC, useState } from "react";
 import {
   Avatar,
   IconButton,
@@ -11,24 +8,18 @@ import {
   Alert,
   Pane,
 } from "evergreen-ui";
-
-const provider = new GoogleAuthProvider();
+import { createSignIn, createSignOut } from "../../auth";
 
 interface LoginPanelProps {
   user: User | null;
 }
 
 export const LoginPanel: FC<LoginPanelProps> = ({ user }) => {
-  const [error, setError] = React.useState<AuthError | null>(null);
-  const signIn = () => {
-    signInWithPopup(auth, provider)
-      .then((result) => {
-        console.log(result);
-      })
-      .catch((error: AuthError) => {
-        setError(error);
-      });
-  };
+  const [error, setError] = useState<AuthError | null>(null);
+
+  const signIn = createSignIn(setError);
+  const signOut = createSignOut();
+
   return (
     <Pane
       position={"absolute"}
@@ -49,7 +40,7 @@ export const LoginPanel: FC<LoginPanelProps> = ({ user }) => {
                 margin: "0.5rem",
               }}
               icon={LogOutIcon}
-              onClick={() => auth.signOut()}
+              onClick={signOut}
             />
           </>
         ) : (

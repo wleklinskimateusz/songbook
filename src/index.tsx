@@ -10,7 +10,7 @@ import { getAuth } from "firebase/auth";
 import { getStorage } from "firebase/storage";
 import { QueryClient, QueryClientProvider } from "react-query";
 
-const queryClient = new QueryClient();
+export const queryClient = new QueryClient();
 
 const firebaseConfig = {
   apiKey: "AIzaSyAomkfNe-8YjmnIfsLJI9Fw6rqncigW9iY",

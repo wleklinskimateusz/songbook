@@ -1,1 +1,1 @@
-export {SongView} from "./SongView";
+export { SongView } from "./SongView";
