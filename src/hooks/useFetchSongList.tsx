@@ -1,6 +1,5 @@
 import { getDocs, collection } from "firebase/firestore";
 import { db } from "..";
-import React from "react";
 import { useQuery } from "react-query";
 import { Song } from "../types";
 
