@@ -45,7 +45,11 @@ function App() {
           <></>
         )}
       </Pane>
-      <SongForm isShown={isShownForm} setIsShown={setIsShownForm} />
+      <SongForm
+        setAlert={setAlert}
+        isShown={isShownForm}
+        setIsShown={setIsShownForm}
+      />
     </>
   );
 }

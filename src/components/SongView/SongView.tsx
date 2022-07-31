@@ -5,6 +5,7 @@ import {
   titleStyles,
   lyricsStyles,
   chordsStyles,
+  saveButtonStyles,
 } from "./styles";
 
 import { Heading, Pre, Pane, Card, Button } from "evergreen-ui";
@@ -45,11 +46,6 @@ export const SongView: FC<SongViewProps> = ({ song, setAlert }) => {
     setIsChanged(false);
   }, [isLoading]);
 
-  if (error) {
-    console.error(error);
-    return <>Ups!, Something went wrong</>;
-  }
-
   return (
     <>
       {isChanged && (
@@ -58,9 +54,7 @@ export const SongView: FC<SongViewProps> = ({ song, setAlert }) => {
             onSave("lyrics");
             onSave("chords");
           }}
-          position="absolute"
-          top="30px"
-          right="100px"
+          style={saveButtonStyles}
         >
           Save changes
         </Button>
@@ -72,7 +66,9 @@ export const SongView: FC<SongViewProps> = ({ song, setAlert }) => {
             display: "flex",
           }}
         >
-          {isLoading ? (
+          {error ? (
+            "Something went wrong"
+          ) : isLoading ? (
             "Loading..."
           ) : (
             <>
@@ -81,9 +77,7 @@ export const SongView: FC<SongViewProps> = ({ song, setAlert }) => {
                 style={lyricsStyles}
                 onClick={() => setEditLyrics(true)}
                 contentEditable={editLyrics}
-                onBlur={() => {
-                  setEditLyrics(false);
-                }}
+                onBlur={() => setEditLyrics(false)}
                 onKeyDown={(event: React.KeyboardEvent<HTMLPreElement>) =>
                   isSaving(event) && onSave("lyrics", event)
                 }
@@ -96,9 +90,7 @@ export const SongView: FC<SongViewProps> = ({ song, setAlert }) => {
                 style={chordsStyles}
                 onClick={() => setEditChords(true)}
                 contentEditable={editChords}
-                onBlur={() => {
-                  setEditChords(false);
-                }}
+                onBlur={() => setEditChords(false)}
                 onKeyDown={(event: React.KeyboardEvent<HTMLPreElement>) =>
                   isSaving(event) && onSave("chords", event)
                 }

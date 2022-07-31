@@ -3,6 +3,7 @@ import { AlertStatus } from "../../types";
 import { storage } from "../..";
 import { Song } from "../../types";
 
+// It's an arrow function that creates another arrow function
 export const createOnSave =
   (
     song: Song,

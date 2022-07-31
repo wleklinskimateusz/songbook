@@ -1,50 +1,40 @@
 import React, { FC, useState } from "react";
 
 import { SideSheet, Button, Heading, Pane, TextInputField } from "evergreen-ui";
-import { Song } from "../../types";
-import { addDoc, collection } from "firebase/firestore";
-import { db } from "../..";
 import { getAuth } from "firebase/auth";
-import { queryClient } from "../../";
 
-import {} from "react-query";
+import { AlertStatus } from "../../types";
+import { useHandleAlert } from "../../hooks";
+import { createAddSong } from "./createAddSong";
+import { formContainerStyles } from "./style";
 
 type Props = {
   isShown: boolean;
   setIsShown: (state: boolean) => void;
+  setAlert: (state: AlertStatus) => void;
 };
 
-export const SongForm: FC<Props> = ({ setIsShown, isShown }) => {
+export const SongForm: FC<Props> = ({ setIsShown, isShown, setAlert }) => {
   const auth = getAuth();
   const [title, setTitle] = useState<string>("");
   const [artist, setArtist] = useState<string>("");
   const [filename, setFilename] = useState<string>("");
-  const addSong = async () => {
-    try {
-      const newSong: Song = {
-        title,
-        artist,
-        filename: filename.endsWith(".txt") ? filename : filename + ".txt",
-        addedBy: auth.currentUser?.uid,
-      };
-      await addDoc(collection(db, "songs"), newSong);
-    } catch (e) {
-      console.error("Error adding the document: ", e);
-    } finally {
-      queryClient.refetchQueries("songs");
-      alert("Done");
-    }
-  };
+  const [startTimeout, setStartTimeout] = useState(false);
+
+  const addSong = createAddSong(
+    filename,
+    auth,
+    title,
+    artist,
+    setAlert,
+    setStartTimeout
+  );
+  useHandleAlert(startTimeout, setStartTimeout, setAlert);
   return (
     <>
       <SideSheet isShown={isShown} onCloseComplete={() => setIsShown(false)}>
         <Heading margin={40}>"Create new Song"</Heading>
-        <Pane
-          display="flex"
-          flexDirection="column"
-          margin="1rem"
-          padding="1rem"
-        >
+        <Pane style={formContainerStyles}>
           <form
             onSubmit={async (event: React.FormEvent) => {
               event.preventDefault();

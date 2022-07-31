@@ -58,3 +58,9 @@ export const lyricsStyles: React.CSSProperties = {
 export const chordsStyles: React.CSSProperties = {
   ...lyricsStyles,
 };
+
+export const saveButtonStyles: React.CSSProperties = {
+  position: "absolute",
+  top: "30px",
+  right: "100px",
+};

@@ -1,11 +1,9 @@
 import React, { FC } from "react";
+import { Button, Pane } from "evergreen-ui";
+
 import { List } from "../common";
 import { Song } from "../../types";
-
-import { Button, Pane } from "evergreen-ui";
-import { useQuery } from "react-query";
-import { collection, getDocs } from "firebase/firestore";
-import { db } from "../..";
+import { useFetchSongList } from "../../hooks";
 
 type Props = {
   setSelected: (song: Song | null) => void;
@@ -13,21 +11,7 @@ type Props = {
 };
 
 export const SongList: FC<Props> = ({ setSelected, onAdd }) => {
-  const {
-    data: songs,
-    isLoading,
-    isError,
-  } = useQuery("songs", async () => {
-    const querySnapshot = await getDocs(collection(db, "songs"));
-    const output: Song[] = [];
-    querySnapshot.forEach((doc) => {
-      output.push({
-        id: doc.id,
-        ...doc.data(),
-      } as Song);
-    });
-    return output;
-  });
+  const { songs, isLoading, isError } = useFetchSongList();
   if (isError) {
     return <>Ups... Error</>;
   }
