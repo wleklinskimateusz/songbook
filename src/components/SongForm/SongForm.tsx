@@ -1,8 +1,8 @@
-import React, { FC, useEffect, useState } from "react";
+import React, { FC, useState } from "react";
 
 import { SideSheet, Button, Heading, Pane, TextInputField } from "evergreen-ui";
 import { Song } from "../../types";
-import { addDoc, collection, getDocs } from "firebase/firestore";
+import { addDoc, collection } from "firebase/firestore";
 import { db } from "../..";
 import { getAuth } from "firebase/auth";
 import { queryClient } from "../../";
@@ -31,8 +31,8 @@ export const SongForm: FC<Props> = ({ setIsShown, isShown }) => {
     } catch (e) {
       console.error("Error adding the document: ", e);
     } finally {
-      alert("Done");
       queryClient.refetchQueries("songs");
+      alert("Done");
     }
   };
   return (
