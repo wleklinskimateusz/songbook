@@ -10,12 +10,13 @@ export const useFetchSong = (filename: string) => {
   const [error, setError] = useState<unknown | null>(null);
   const isLoading = isLoadingChords || isLoadingLyrics;
   useEffect(() => {
+    if (!filename) return;
     setIsLoadingChords(true);
     setIsLoadingLyrics(true);
     const lyricsRef = ref(storage, `lyrics/${filename}`);
     const chordsRef = ref(storage, `chords/${filename}`);
     const fetchData = (
-      setData: (data: string) => void,
+      setData: (data: string | null) => void,
       setIsLoading: (status: boolean) => void,
       ref: StorageReference
     ) => {
@@ -38,6 +39,8 @@ export const useFetchSong = (filename: string) => {
         })
         .catch((e) => {
           setError(e);
+          setIsLoading(false);
+          setData(null);
         });
     };
     fetchData(setLyrics, setIsLoadingLyrics, lyricsRef);
