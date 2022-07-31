@@ -5,13 +5,13 @@ import { User } from "firebase/auth";
 import { SongList, SongView, SongForm, LoginPanel } from "./components";
 import { Alert, Pane } from "evergreen-ui";
 
-import { Song } from "./types";
+import { Song, AlertStatus } from "./types";
 
 function App() {
   const [user, setUser] = useState<User | null>(null);
   const [selected, setSelected] = useState<Song | null>(null);
   const [isShownForm, setIsShownForm] = useState(false);
-  const [alert, setAlert] = useState<null | "success" | "error">(null);
+  const [alert, setAlert] = useState<AlertStatus>(AlertStatus.None);
   useEffect(() => {
     auth.onAuthStateChanged((user: User | null) => {
       setUser(user);
@@ -21,15 +21,12 @@ function App() {
   return (
     <>
       <LoginPanel user={user} />
-      {alert && (
-        <Alert
-          intent={alert}
-          title={
-            alert === "success"
-              ? "Adding Successful"
-              : "Something went wrong :/"
-          }
-        />
+      {alert === AlertStatus.None ? (
+        <></>
+      ) : alert === AlertStatus.Success ? (
+        <Alert intent="success" title="Mission Accomplished" />
+      ) : (
+        <Alert intent="error" title="Something went wrong :/" />
       )}
       <Pane
         display={"grid"}

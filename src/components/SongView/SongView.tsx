@@ -8,28 +8,13 @@ import {
 } from "./styles";
 
 import { Heading, Pre, Pane, Card, Button } from "evergreen-ui";
-import { storage } from "../..";
-import { Song } from "../../types";
-import {
-  getDownloadURL,
-  ref,
-  StorageReference,
-  uploadString,
-} from "firebase/storage";
-import { useQuery } from "react-query";
-import { useFetchSong } from "../../hooks/useFetchSong";
-import { StringLiteral } from "typescript";
+import { Song, AlertStatus } from "../../types";
+import { useHandleAlert, useFetchSong, useCheckChanges } from "../../hooks";
+import { createOnSave } from "./createOnSave";
 
 interface SongViewProps {
   song: Song;
-  setAlert: (status: null | "success" | "error") => void;
-}
-
-interface SongData {
-  lyrics: string;
-  chords: StringLiteral;
-  isLoading: boolean;
-  error: unknown;
+  setAlert: (status: AlertStatus) => void;
 }
 
 const isSaving = (event: React.KeyboardEvent<HTMLPreElement>) =>
@@ -43,41 +28,22 @@ export const SongView: FC<SongViewProps> = ({ song, setAlert }) => {
   const [startTimeout, setStartTimeout] = useState(false);
   const [isChanged, setIsChanged] = useState(false);
 
-  const onSave = (
-    source: "lyrics" | "chords",
-    event?: React.KeyboardEvent<HTMLPreElement>
-  ) => {
-    setIsChanged(false);
-    event?.preventDefault();
-    const storeRef = ref(storage, `${source}/${song.filename}`);
-    console.log("dupa");
-    uploadString(
-      storeRef,
-      (source === "lyrics" ? lyricsElement : chordsElement).current
-        ?.innerText ?? ""
-    )
-      .catch((e) => {
-        console.error(e);
-        setAlert("error");
-        setStartTimeout(true);
-      })
-      .then(() => {
-        setAlert("success");
-        setStartTimeout(true);
-      });
-  };
+  const onSave = createOnSave(
+    song,
+    setIsChanged,
+    setAlert,
+    lyricsElement,
+    chordsElement,
+    setStartTimeout
+  );
+  const { lyrics, chords, isLoading, error } = useFetchSong(song.filename);
+
+  useHandleAlert(startTimeout, setStartTimeout, setAlert);
+  useCheckChanges(lyrics, chords, setIsChanged, lyricsElement, chordsElement);
 
   useEffect(() => {
-    if (startTimeout) {
-      const timer = setTimeout(() => {
-        setAlert(null);
-        setStartTimeout(false);
-      }, 2000);
-      return () => clearTimeout(timer);
-    }
-  }, [startTimeout, setAlert]);
-
-  const { lyrics, chords, isLoading, error } = useFetchSong(song.filename);
+    setIsChanged(false);
+  }, [isLoading]);
 
   if (error) {
     console.error(error);
@@ -121,7 +87,7 @@ export const SongView: FC<SongViewProps> = ({ song, setAlert }) => {
                 onKeyDown={(event: React.KeyboardEvent<HTMLPreElement>) =>
                   isSaving(event) && onSave("lyrics", event)
                 }
-                onChange={() => {}}
+                onChange={() => setIsChanged(true)}
               >
                 {lyrics}
               </Pre>
