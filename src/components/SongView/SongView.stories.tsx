@@ -1,6 +1,3 @@
-// Write storybook to a component called SongView
-// Language: typescript
-
 import React from "react";
 import { SongView } from "./SongView";
 
