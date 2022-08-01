@@ -5,7 +5,7 @@ import React from "react";
 import { SongView } from "./SongView";
 
 export default {
-  title: "SongView",
+  title: "Components/SongView",
   component: SongView,
 };
 
