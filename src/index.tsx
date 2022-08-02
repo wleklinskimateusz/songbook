@@ -30,6 +30,7 @@ const root = ReactDOM.createRoot(
   (document.getElementById("root") as HTMLElement) ||
     document.createElement("div")
 );
+
 root.render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
