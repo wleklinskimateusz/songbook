@@ -1,5 +1,6 @@
 import { User, AuthError } from "firebase/auth";
 import React, { FC, useState } from "react";
+import { Text } from "evergreen-ui";
 import {
   Avatar,
   IconButton,
@@ -44,7 +45,10 @@ export const LoginPanel: FC<LoginPanelProps> = ({ user }) => {
             />
           </>
         ) : (
-          <IconButton icon={LogInIcon} onClick={signIn} />
+          <>
+            <Text>Login</Text>
+            <IconButton icon={LogInIcon} onClick={signIn} />
+          </>
         )}
       </Pane>
 
