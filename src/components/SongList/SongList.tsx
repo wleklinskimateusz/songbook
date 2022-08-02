@@ -8,10 +8,15 @@ import { useFetchSongList } from "../../hooks";
 type Props = {
   setSelected: (song: Song | null) => void;
   onAdd: () => void;
+  fetchedSongs: {
+    isLoading: boolean;
+    isError: boolean;
+    songs: Song[];
+  };
 };
 
-export const SongList: FC<Props> = ({ setSelected, onAdd }) => {
-  const { songs, isLoading, isError } = useFetchSongList();
+export const SongList: FC<Props> = ({ setSelected, onAdd, fetchedSongs }) => {
+  const { songs, isLoading, isError } = fetchedSongs;
   if (isError) {
     return <>Ups... Error</>;
   }

@@ -6,6 +6,7 @@ import { SongList, SongView, SongForm, LoginPanel } from "./components";
 import { Alert, Pane } from "evergreen-ui";
 
 import { Song, AlertStatus } from "./types";
+import { useFetchSong, useFetchSongList } from "./hooks";
 
 function App() {
   const [user, setUser] = useState<User | null>(null);
@@ -38,6 +39,7 @@ function App() {
         <SongList
           setSelected={setSelected}
           onAdd={() => setIsShownForm(true)}
+          fetchedSongs={useFetchSongList()}
         />
         {selected !== null ? (
           <SongView setAlert={setAlert} song={selected} />
