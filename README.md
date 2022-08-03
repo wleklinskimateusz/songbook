@@ -1,6 +1,6 @@
 # Songbook
 
-This app lets users to save their favourite songs to sing & play
+This app lets users save their favourite songs to sing & play
 
 ## Technology
 
