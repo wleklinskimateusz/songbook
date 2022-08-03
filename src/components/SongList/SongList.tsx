@@ -3,7 +3,6 @@ import { Button, Pane } from "evergreen-ui";
 
 import { List } from "../common";
 import { Song } from "../../types";
-import { useFetchSongList } from "../../hooks";
 
 type Props = {
   setSelected: (song: Song | null) => void;

@@ -6,7 +6,7 @@ import { SongList, SongView, SongForm, LoginPanel } from "./components";
 import { Alert, Pane } from "evergreen-ui";
 
 import { Song, AlertStatus } from "./types";
-import { useFetchSong, useFetchSongList } from "./hooks";
+import { useFetchSongList } from "./hooks";
 
 function App() {
   const [user, setUser] = useState<User | null>(null);
