@@ -15,5 +15,5 @@ export const useFetchSongList = () => {
     });
     return output;
   });
-  return { songs: data, isLoading, isError };
+  return { songs: data ?? [], isLoading, isError };
 };
