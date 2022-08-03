@@ -29,7 +29,7 @@ This app lets users save their favourite songs to sing & play
 ## Workflow
 
 - the backlog is a list of tasks that need to be done and it is located in the issues section of the repository.
-- You can assign yourself to a task by clicking on the assignee icon in the issue. (It automatically moves the task from `backlog` to `in progress`).
+- You can assign yourself to a task by clicking on the assignee icon in the issue and move the task to the `in progress` section.
 - Before starting a task, create a branch with the name of the task and a category. For example: `feature/add-song-to-playlist`. Available categories are:
   - `feature`
   - `bug`
