@@ -1,12 +1,11 @@
 import { AuthError, createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "..";
 
-export const createStandardSignIn =
-  (setError: (e: AuthError) => void) =>
-  (email: string, password: string, username: string) => {
+export const createStandardSignUp =
+  (setError: (e: string) => void) => (email: string, password: string) => {
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         console.log(userCredential.user);
       })
-      .catch((error) => setError(error));
+      .catch((error: AuthError) => setError(error.message as string));
   };

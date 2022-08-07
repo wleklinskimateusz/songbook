@@ -1,7 +1,7 @@
 import { AuthError } from "firebase/auth";
 import { createGoogleSignIn, createStandardSignIn } from "./signIn";
 
-export const createSignIn = (setError: (e: AuthError) => void) => {
+export const createSignIn = (setError: (e: string) => void) => {
   const googleSignIn = createGoogleSignIn(setError);
   const standardSignIn = createStandardSignIn(setError);
 

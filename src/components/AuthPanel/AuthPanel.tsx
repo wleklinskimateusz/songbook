@@ -32,8 +32,17 @@ const IconStyled = styled(Icon)`
   }
 `;
 
+const AuthPanelStyled = styled(Pane)`
+  display: flex;
+  flex-direction: column;
+  width: 100vw;
+  height: 100vh;
+  justify-content: center;
+  align-items: center;
+`;
+
 export const AuthPanel: FC = () => {
-  const [error, setError] = useState<AuthError | null>(null);
+  const [error, setError] = useState<string | null>(null);
   const [createAccount, setCreateAccount] = useState(false);
 
   const { googleSignIn } = createSignIn(setError);
@@ -50,14 +59,8 @@ export const AuthPanel: FC = () => {
 
   return (
     <>
-      {error && <Alert intent="error">{error.message}</Alert>}
-      <Pane
-        display="flex"
-        width="100vw"
-        height="100vh"
-        justifyContent="center"
-        alignItems="center"
-      >
+      <AuthPanelStyled>
+        {error && <Alert margin="0.5rem" intent="danger" title={error} />}
         <Pane display={"flex"} alignItems="center" flexDirection="column">
           <>
             {form}
@@ -83,9 +86,7 @@ export const AuthPanel: FC = () => {
             </BottomStyled>
           </>
         </Pane>
-
-        {error && <Alert intent="danger">{error.message}</Alert>}
-      </Pane>
+      </AuthPanelStyled>
     </>
   );
 };

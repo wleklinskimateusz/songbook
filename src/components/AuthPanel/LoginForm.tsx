@@ -11,7 +11,7 @@ const FormStyled = styled.form`
 `;
 
 export const LoginForm: FC<{
-  setError: (error: AuthError) => void;
+  setError: (error: string) => void;
 }> = ({ setError }) => {
   const standardSignIn = createStandardSignIn(setError);
   return (
