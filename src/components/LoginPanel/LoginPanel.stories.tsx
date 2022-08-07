@@ -9,6 +9,4 @@ export default {
   component: LoginPanel,
 } as ComponentMeta<typeof LoginPanel>;
 
-export const NoUser: ComponentStory<typeof LoginPanel> = () => (
-  <LoginPanel user={null} />
-);
+export const NoUser: ComponentStory<typeof LoginPanel> = () => <LoginPanel />;

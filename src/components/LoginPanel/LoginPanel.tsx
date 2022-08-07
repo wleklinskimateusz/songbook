@@ -1,58 +1,95 @@
-import { User, AuthError } from "firebase/auth";
+import { AuthError } from "firebase/auth";
 import React, { FC, useState } from "react";
-import { Text } from "evergreen-ui";
 import {
-  Avatar,
-  IconButton,
-  LogOutIcon,
-  LogInIcon,
-  Alert,
-  Pane,
+  Button,
+  FormField,
+  FormFieldDescription,
+  Icon,
+  Text,
+  TextInput,
 } from "evergreen-ui";
-import { createSignIn, createSignOut } from "../../auth";
+import { Alert, Pane } from "evergreen-ui";
+import { createSignIn } from "../../auth";
+import { GoogleIcon, FacebookIcon, AppleIcon } from "../../assets/icons";
+import styled from "styled-components";
+import { colors } from "../../config";
+import { saturate } from "polished";
 
-interface LoginPanelProps {
-  user: User | null;
-}
+const FormStyled = styled.form`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+`;
 
-export const LoginPanel: FC<LoginPanelProps> = ({ user }) => {
+const IconsContainer = styled.div`
+  display: flex;
+`;
+
+const IconStyled = styled(Icon)`
+  margin: 0.5rem;
+  padding: 0.5rem;
+  border-radius: 25%;
+  transition: all 0.5s;
+
+  &:hover {
+    box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.5);
+  }
+`;
+
+export const LoginPanel: FC = () => {
   const [error, setError] = useState<AuthError | null>(null);
 
-  const signIn = createSignIn(setError);
-  const signOut = createSignOut();
+  const { googleSignIn, standardSignIn } = createSignIn(setError);
+  const providers = [
+    { icon: GoogleIcon, onClick: googleSignIn },
+    { icon: FacebookIcon, onClick: () => {} },
+    { icon: AppleIcon, onClick: () => {} },
+  ];
 
   return (
-    <Pane
-      position={"absolute"}
-      top={"0"}
-      right={"0"}
-      padding={"1rem"}
-      display="flex"
-      flexDirection={"column"}
-      margin={"1rem"}
-      elevation={1}
-    >
-      <Pane display={"flex"} alignItems="center">
-        {user ? (
+    <>
+      {error && <Alert intent="error">{error.message}</Alert>}
+      <Pane
+        display="flex"
+        width="100vw"
+        height="100vh"
+        justifyContent="center"
+        alignItems="center"
+      >
+        <Pane display={"flex"} alignItems="center" flexDirection="column">
           <>
-            <Avatar name={user.displayName} size={40} />
-            <IconButton
-              style={{
-                margin: "0.5rem",
+            <FormStyled
+              onSubmit={(event) => {
+                const email = (
+                  event.currentTarget.elements[0] as HTMLInputElement
+                ).value;
+                const password = (
+                  event.currentTarget.elements[1] as HTMLInputElement
+                ).value;
+                standardSignIn(email, password);
               }}
-              icon={LogOutIcon}
-              onClick={signOut}
-            />
+            >
+              <FormField label="Username" margin="0.5rem">
+                <TextInput placeholder="Type your username" />
+              </FormField>
+              <FormField label="Password" margin="0.5rem">
+                <TextInput type="password" placeholder="Type your password" />
+              </FormField>
+              <Button type="submit" width="fit-content" margin="0.5rem">
+                Log In
+              </Button>
+            </FormStyled>
+            <IconsContainer>
+              {providers.map((item, key) => (
+                <IconStyled key={key} icon={item.icon} onClick={item.onClick} />
+              ))}
+            </IconsContainer>
           </>
-        ) : (
-          <>
-            <Text>Login</Text>
-            <IconButton icon={LogInIcon} onClick={signIn} />
-          </>
-        )}
-      </Pane>
+        </Pane>
 
-      {error && <Alert intent="danger">{error.message}</Alert>}
-    </Pane>
+        {error && <Alert intent="danger">{error.message}</Alert>}
+      </Pane>
+    </>
   );
 };

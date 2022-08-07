@@ -7,21 +7,26 @@ import { Alert, Pane } from "evergreen-ui";
 
 import { Song, AlertStatus } from "./types";
 import { useFetchSongList } from "./hooks";
+import { Profile } from "./components/Profile";
 
 function App() {
   const [user, setUser] = useState<User | null>(null);
   const [selected, setSelected] = useState<Song | null>(null);
   const [isShownForm, setIsShownForm] = useState(false);
   const [alert, setAlert] = useState<AlertStatus>(AlertStatus.None);
+  const songs = useFetchSongList();
   useEffect(() => {
     auth.onAuthStateChanged((user: User | null) => {
       setUser(user);
     });
   });
+  if (user === null) {
+    return <LoginPanel />;
+  }
 
   return (
     <>
-      <LoginPanel user={user} />
+      <Profile user={user} />
       {alert === AlertStatus.None ? (
         <></>
       ) : alert === AlertStatus.Success ? (
@@ -39,7 +44,7 @@ function App() {
         <SongList
           setSelected={setSelected}
           onAdd={() => setIsShownForm(true)}
-          fetchedSongs={useFetchSongList()}
+          fetchedSongs={songs}
         />
         {selected !== null ? (
           <SongView setAlert={setAlert} song={selected} />

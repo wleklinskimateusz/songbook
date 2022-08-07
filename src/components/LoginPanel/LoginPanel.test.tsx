@@ -3,7 +3,7 @@ import { render, screen } from "@testing-library/react";
 import { LoginPanel } from "./LoginPanel";
 
 test("LoginPanel", () => {
-  render(<LoginPanel user={null} />);
+  render(<LoginPanel />);
   const loginButton = screen.getByText("Login");
   expect(loginButton).toBeInTheDocument();
 });
