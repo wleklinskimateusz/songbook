@@ -2,12 +2,10 @@ import React, { useEffect, useState } from "react";
 import { auth } from "./index";
 import { User } from "firebase/auth";
 
-import { SongList, SongView, SongForm, LoginPanel } from "./components";
+import { SongList, SongView, SongForm, AuthPanel, Profile } from "./components";
 import { Alert, Pane } from "evergreen-ui";
-
 import { Song, AlertStatus } from "./types";
 import { useFetchSongList } from "./hooks";
-import { Profile } from "./components/Profile";
 
 function App() {
   const [user, setUser] = useState<User | null>(null);
@@ -21,7 +19,7 @@ function App() {
     });
   });
   if (user === null) {
-    return <LoginPanel />;
+    return <AuthPanel />;
   }
 
   return (

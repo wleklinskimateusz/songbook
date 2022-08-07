@@ -1,4 +1,13 @@
-import { Avatar, IconButton, LogOutIcon, Pane } from "evergreen-ui";
+import {
+  Avatar,
+  LogOutIcon,
+  Pane,
+  Popover,
+  Position,
+  Menu,
+  PeopleIcon,
+  EditIcon,
+} from "evergreen-ui";
 import { User } from "firebase/auth";
 import React, { FC } from "react";
 import { createSignOut } from "../../auth";
@@ -18,17 +27,28 @@ export const Profile: FC<ProfileProps> = ({ user }) => {
       display="flex"
       flexDirection={"column"}
       margin={"1rem"}
-      elevation={1}
+      cursor="pointer"
     >
       <Pane display={"flex"} alignItems="center">
-        <Avatar name={user.displayName} size={40} />
-        <IconButton
-          style={{
-            margin: "0.5rem",
-          }}
-          icon={LogOutIcon}
-          onClick={signOut}
-        />
+        <Popover
+          position={Position.BOTTOM_LEFT}
+          content={
+            <Menu>
+              <Menu.Group title="Actions">
+                <Menu.Item icon={PeopleIcon}>Create Songlist</Menu.Item>
+              </Menu.Group>
+              <Menu.Divider />
+              <Menu.Group title="Profile">
+                <Menu.Item icon={EditIcon}>Manage Account</Menu.Item>
+                <Menu.Item icon={LogOutIcon} intent="danger" onSelect={signOut}>
+                  Log Out
+                </Menu.Item>
+              </Menu.Group>
+            </Menu>
+          }
+        >
+          <Avatar name={user.displayName} size={40} />
+        </Popover>
       </Pane>
     </Pane>
   );

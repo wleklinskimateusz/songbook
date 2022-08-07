@@ -1,8 +1,9 @@
 import React, { FC } from "react";
-import { Button, Pane } from "evergreen-ui";
+import { AddIcon, Icon, Pane } from "evergreen-ui";
 
 import { List } from "../common";
 import { Song } from "../../types";
+import styled from "styled-components";
 
 type Props = {
   setSelected: (song: Song | null) => void;
@@ -13,6 +14,27 @@ type Props = {
     songs: Song[];
   };
 };
+
+const IconStyled = styled(Icon)`
+  margin: 0.5rem;
+  padding: 0.5rem;
+  color: #1da81d;
+  cursor: pointer;
+  transition: color 0.3s;
+
+  &:hover {
+    color: #106210;
+  }
+`;
+
+const SongListStyled = styled(Pane)`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  align-self: start;
+  width: 100%;
+`;
 
 export const SongList: FC<Props> = ({ setSelected, onAdd, fetchedSongs }) => {
   const { songs, isLoading, isError } = fetchedSongs;
@@ -27,17 +49,9 @@ export const SongList: FC<Props> = ({ setSelected, onAdd, fetchedSongs }) => {
     return <>No data</>;
   }
   return (
-    <Pane
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-        alignSelf: "start",
-        width: "100%",
-      }}
-    >
-      <Button onClick={onAdd}>Add song</Button>
+    <SongListStyled>
+      <IconStyled icon={AddIcon} onClick={onAdd} />
+
       <List
         data={
           songs?.map((item) => ({
@@ -51,6 +65,6 @@ export const SongList: FC<Props> = ({ setSelected, onAdd, fetchedSongs }) => {
           setSelected(songs?.find((item) => item.id === id) || null)
         }
       />
-    </Pane>
+    </SongListStyled>
   );
 };
