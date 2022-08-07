@@ -7,5 +7,14 @@ export const createStandardSignUp =
       .then((userCredential) => {
         console.log(userCredential.user);
       })
-      .catch((error: AuthError) => setError(error.message as string));
+      .catch((error: AuthError) => {
+        switch (error.code) {
+          case "auth/email-already-in-use":
+            setError("Email already in use");
+            break;
+
+          default:
+            setError(error.message);
+        }
+      });
   };

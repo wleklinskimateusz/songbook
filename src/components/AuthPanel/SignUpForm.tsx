@@ -1,76 +1,79 @@
 import { Button, FormField, TextInput } from "evergreen-ui";
-import React, { FC, useRef } from "react";
+import React, { FC } from "react";
+import { useForm } from "react-hook-form";
 import styled from "styled-components";
 import { createStandardSignUp } from "../../auth";
-import { isEmailValid } from "../../auth/validation";
 const FormStyled = styled.form`
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
 `;
-
-const getInput = (event: React.FormEvent<HTMLFormElement>, idx: number) =>
-  (event.currentTarget.elements[idx] as HTMLInputElement).value;
+interface FormData {
+  email: string;
+  password: string;
+  repeatPassword: string;
+}
 
 export const SignUpForm: FC<{
   setError: (error: string) => void;
 }> = ({ setError }) => {
-  const emailElement = useRef<HTMLInputElement>(null);
-  const passwordElement = useRef<HTMLInputElement>(null);
-  const repeatPasswordElement = useRef<HTMLInputElement>(null);
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm<FormData>();
   const standardSignUp = createStandardSignUp(setError);
+  const onSubmit = (data: FormData) => {
+    const { email, password } = data;
+    standardSignUp(email, password);
+  };
   return (
-    <FormStyled
-      onSubmit={(event) => {
-        event.preventDefault();
-        const email = getInput(event, 0);
-        const password = getInput(event, 1);
-        const repeatPassword = getInput(event, 2);
-        if (password !== repeatPassword) {
-          setError("Passwords do not match!");
-        } else {
-          standardSignUp(email, password);
-        }
-      }}
-    >
+    <FormStyled onSubmit={handleSubmit(onSubmit)}>
       <FormField
-        validationMessage={"This is not a valid email"}
         isRequired
+        validationMessage={errors.email?.message}
         label="Email"
         margin="0.5rem"
       >
         <TextInput
-          ref={emailElement}
-          isInvalid={
-            emailElement.current
-              ? !isEmailValid(emailElement.current.value)
-              : true
-          }
-          required
           placeholder="Type your email"
-        />
-      </FormField>
-      <FormField isRequired label="Password" margin="0.5rem">
-        <TextInput
-          ref={passwordElement}
-          required
-          type="password"
-          placeholder="Type your password"
+          {...register("email", {
+            required: "This field is required",
+            pattern: {
+              value: /^\S+@\S+$/i,
+              message: "The input must be an email",
+            },
+          })}
         />
       </FormField>
       <FormField
-        validationMessage={"Passwords must much"}
+        validationMessage={errors.password?.message}
+        isRequired
+        label="Password"
+        margin="0.5rem"
+      >
+        <TextInput
+          placeholder="Type your password"
+          type="password"
+          {...register("password", { required: "This field is required" })}
+        />
+      </FormField>
+      <FormField
+        validationMessage={errors.repeatPassword?.message}
         isRequired
         label="Repeat Password"
         margin="0.5rem"
       >
         <TextInput
-          ref={repeatPasswordElement}
-          required
-          isInvalid={passwordElement !== repeatPasswordElement}
-          type="password"
           placeholder="Repeat your password"
+          type="password"
+          {...register("repeatPassword", {
+            required: "This field is required",
+            validate: (value) =>
+              value === watch("password") || "Password do not match",
+          })}
         />
       </FormField>
       <Button type="submit" width="fit-content" margin="0.5rem">
