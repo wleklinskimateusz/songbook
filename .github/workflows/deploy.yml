@@ -1,3 +1,5 @@
+name: Publish App
+
 on:
   push:
     branches: ["master"]
