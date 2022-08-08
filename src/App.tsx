@@ -2,9 +2,8 @@ import React, { useEffect, useState } from "react";
 import { auth } from "./index";
 import { User } from "firebase/auth";
 
-import { SongList, SongView, SongForm, LoginPanel } from "./components";
+import { SongList, SongView, SongForm, AuthPanel, Profile } from "./components";
 import { Alert, Pane } from "evergreen-ui";
-
 import { Song, AlertStatus } from "./types";
 import { useFetchSongList } from "./hooks";
 
@@ -13,15 +12,19 @@ function App() {
   const [selected, setSelected] = useState<Song | null>(null);
   const [isShownForm, setIsShownForm] = useState(false);
   const [alert, setAlert] = useState<AlertStatus>(AlertStatus.None);
+  const songs = useFetchSongList();
   useEffect(() => {
     auth.onAuthStateChanged((user: User | null) => {
       setUser(user);
     });
   });
+  if (user === null) {
+    return <AuthPanel />;
+  }
 
   return (
     <>
-      <LoginPanel user={user} />
+      <Profile user={user} />
       {alert === AlertStatus.None ? (
         <></>
       ) : alert === AlertStatus.Success ? (
@@ -39,7 +42,7 @@ function App() {
         <SongList
           setSelected={setSelected}
           onAdd={() => setIsShownForm(true)}
-          fetchedSongs={useFetchSongList()}
+          fetchedSongs={songs}
         />
         {selected !== null ? (
           <SongView setAlert={setAlert} song={selected} />

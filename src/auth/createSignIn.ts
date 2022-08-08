@@ -1,13 +1,8 @@
-import { AuthError, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
-import { auth } from "..";
+import { createGoogleSignIn, createStandardSignIn } from "./signIn";
 
-export const createSignIn = (setError: (e: AuthError) => void) => () => {
-  const provider = new GoogleAuthProvider();
-  signInWithPopup(auth, provider)
-    .then((result) => {
-      console.log(result);
-    })
-    .catch((error: AuthError) => {
-      setError(error);
-    });
+export const createSignIn = (setError: (e: string) => void) => {
+  const googleSignIn = createGoogleSignIn(setError);
+  const standardSignIn = createStandardSignIn(setError);
+
+  return { googleSignIn, standardSignIn };
 };
