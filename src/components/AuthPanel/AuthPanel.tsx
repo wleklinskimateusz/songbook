@@ -1,4 +1,3 @@
-import { AuthError } from "firebase/auth";
 import React, { FC, useState } from "react";
 import { Icon, Link } from "evergreen-ui";
 import { Alert, Pane } from "evergreen-ui";

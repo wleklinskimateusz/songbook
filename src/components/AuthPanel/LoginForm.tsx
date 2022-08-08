@@ -1,5 +1,4 @@
 import { Button, FormField, TextInput } from "evergreen-ui";
-import { AuthError } from "firebase/auth";
 import React, { FC } from "react";
 import { useForm } from "react-hook-form";
 import styled from "styled-components";
@@ -21,7 +20,6 @@ export const LoginForm: FC<{
   const {
     register,
     handleSubmit,
-    watch,
     formState: { errors },
   } = useForm<FormData>();
   const standardSignIn = createStandardSignIn(setError);
@@ -32,6 +30,7 @@ export const LoginForm: FC<{
   return (
     <FormStyled onSubmit={handleSubmit(onSubmit)}>
       <FormField
+        isRequired
         validationMessage={errors.email?.message}
         label="Email"
         margin="0.5rem"
@@ -48,6 +47,7 @@ export const LoginForm: FC<{
         />
       </FormField>
       <FormField
+        isRequired
         validationMessage={errors.password?.message}
         label="Password"
         margin="0.5rem"
