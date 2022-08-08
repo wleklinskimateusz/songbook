@@ -1,6 +1,7 @@
 import { Button, FormField, TextInput } from "evergreen-ui";
 import { AuthError } from "firebase/auth";
 import React, { FC } from "react";
+import { useForm } from "react-hook-form";
 import styled from "styled-components";
 import { createStandardSignIn } from "../../auth";
 const FormStyled = styled.form`
@@ -9,26 +10,53 @@ const FormStyled = styled.form`
   justify-content: center;
   align-items: center;
 `;
+interface FormData {
+  email: string;
+  password: string;
+}
 
 export const LoginForm: FC<{
   setError: (error: string) => void;
 }> = ({ setError }) => {
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm<FormData>();
   const standardSignIn = createStandardSignIn(setError);
+  const onSubmit = (data: FormData) => {
+    const { email, password } = data;
+    standardSignIn(email, password);
+  };
   return (
-    <FormStyled
-      onSubmit={(event) => {
-        const email = (event.currentTarget.elements[0] as HTMLInputElement)
-          .value;
-        const password = (event.currentTarget.elements[1] as HTMLInputElement)
-          .value;
-        standardSignIn(email, password);
-      }}
-    >
-      <FormField label="Email" margin="0.5rem">
-        <TextInput placeholder="Type your email" />
+    <FormStyled onSubmit={handleSubmit(onSubmit)}>
+      <FormField
+        validationMessage={errors.email?.message}
+        label="Email"
+        margin="0.5rem"
+      >
+        <TextInput
+          {...register("email", {
+            required: "This field is required",
+            pattern: {
+              value: /^\S+@\S+$/i,
+              message: "The input must be an email",
+            },
+          })}
+          placeholder="Type your email"
+        />
       </FormField>
-      <FormField label="Password" margin="0.5rem">
-        <TextInput type="password" placeholder="Type your password" />
+      <FormField
+        validationMessage={errors.password?.message}
+        label="Password"
+        margin="0.5rem"
+      >
+        <TextInput
+          {...register("password", { required: "This field is required" })}
+          type="password"
+          placeholder="Type your password"
+        />
       </FormField>
       <Button type="submit" width="fit-content" margin="0.5rem">
         Log In
