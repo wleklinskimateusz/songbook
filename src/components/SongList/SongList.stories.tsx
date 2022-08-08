@@ -1,5 +1,4 @@
 import React from "react";
-import { QueryClient, QueryClientProvider } from "react-query";
 import { Song } from "../../types";
 import { SongList } from "./SongList";
 

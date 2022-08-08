@@ -1,49 +1,45 @@
-import React from "react";
-import { render, screen } from "@testing-library/react";
+import React, { useState } from "react";
+import { render, screen, act } from "@testing-library/react";
 import { SongList } from "./SongList";
-import { QueryClient, QueryClientProvider } from "react-query";
+import { Song } from "../../types";
 
-const queryClient = new QueryClient();
+const Container = () => {
+  const [songs, setSongs] = useState<Song[]>([]);
+  return (
+    <SongList
+      setSelected={() => {}}
+      onAdd={() =>
+        act(() => {
+          setSongs([
+            ...songs,
+            {
+              title: "Test Song",
+              artist: "Remeo",
+              filename: "test.txt",
+              id: Math.floor(Math.random()).toString(),
+            },
+          ]);
+        })
+      }
+      fetchedSongs={{
+        isLoading: false,
+        isError: false,
+        songs,
+      }}
+    />
+  );
+};
 
 describe("SongList", () => {
-  it("render component correctly", () => {
-    render(
-      <QueryClientProvider client={queryClient}>
-        <SongList
-          setSelected={() => {}}
-          onAdd={() => {}}
-          fetchedSongs={{
-            isLoading: false,
-            isError: false,
-            songs: [
-              {
-                id: "0",
-                title: "Hello, Hello",
-                artist: "Me",
-                rating: 5,
-                filename: "hello.mp3",
-              },
-              {
-                id: "1",
-                title: "Oh my God",
-                artist: "Yololo",
-                rating: 4,
-                filename: "oh-my-god.mp3",
-              },
-              {
-                id: "2",
-                title: "Hihih",
-                artist: "hahahaha",
-                rating: 3,
-                filename: "hihih.mp3",
-              },
-            ],
-          }}
-        />
-      </QueryClientProvider>
-    );
+  it("render component correctly", async () => {
+    render(<Container />);
 
-    const addButton = screen.getByText("Add song");
+    const addButtonWrapper = screen.getByTestId("add-song");
+    expect(addButtonWrapper).toBeInTheDocument();
+    const addButton = addButtonWrapper.childNodes[0] as HTMLButtonElement;
     expect(addButton).toBeInTheDocument();
+    addButton.click();
+    const testSong = await screen.findByText("Test Song");
+    expect(testSong).toBeInTheDocument();
   });
 });

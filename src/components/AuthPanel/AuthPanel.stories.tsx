@@ -5,7 +5,7 @@ import { ComponentStory, ComponentMeta } from "@storybook/react";
 import { AuthPanel } from "./AuthPanel";
 
 export default {
-  title: "Components/LoginPanel",
+  title: "Components/auth/AuthPanel",
   component: AuthPanel,
 } as ComponentMeta<typeof AuthPanel>;
 

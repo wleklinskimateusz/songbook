@@ -4,6 +4,7 @@ import { AddIcon, Icon, Pane } from "evergreen-ui";
 import { List } from "../common";
 import { Song } from "../../types";
 import styled from "styled-components";
+import { TestAnchor } from "../../testing/TestAnchor";
 
 type Props = {
   setSelected: (song: Song | null) => void;
@@ -50,7 +51,9 @@ export const SongList: FC<Props> = ({ setSelected, onAdd, fetchedSongs }) => {
   }
   return (
     <SongListStyled>
-      <IconStyled icon={AddIcon} onClick={onAdd} />
+      <TestAnchor tag={"add-song"}>
+        <IconStyled icon={AddIcon} onClick={onAdd} />
+      </TestAnchor>
 
       <List
         data={

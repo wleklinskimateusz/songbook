@@ -2,7 +2,7 @@ import { Button, FormField, TextInput } from "evergreen-ui";
 import React, { FC } from "react";
 import { useForm } from "react-hook-form";
 import styled from "styled-components";
-import { createStandardSignIn } from "../../auth";
+import { createStandardSignIn } from "../../../auth";
 const FormStyled = styled.form`
   display: flex;
   flex-direction: column;
